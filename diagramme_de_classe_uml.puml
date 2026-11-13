@@ -1,0 +1,89 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome false
+skinparam shadowing false
+skinparam class {
+  BackgroundColor #F8FAFC
+  BorderColor #1E3A8A
+  ArrowColor #1E3A8A
+  HeaderBackgroundColor #DBEAFE
+}
+title Diagramme de Classes UML - Agence de Voyage de Cotonou
+
+class AgenceVoyage {
+    - passagers : vector<Passager>
+    - vols : vector<Vol>
+    - reservations : vector<Reservation>
+    - paiements : vector<Paiement>
+    - annulations : vector<Annulation>
+    + enregistrerPassager() : void
+    + ajouterVol() : void
+    + afficherVolsDisponibles() : void
+    + effectuerReservation() : void
+    + effectuerPaiement() : void
+    + annulerReservation() : void
+    + consulterReservations() : void
+}
+
+class Passager {
+    - idPassager : int
+    - nom : string
+    - prenom : string
+    - numeroPasseport : string
+    - telephone : string
+    + Passager(id : int, nom : string, prenom : string, passeport : string, tel : string)
+    + getIdPassager() : int
+    + afficherDetails() : void
+}
+
+class Vol {
+    - numeroVol : string
+    - destination : string
+    - dateDepart : string
+    - heureDepart : string
+    - capacite : int
+    - placesDisponibles : int
+    - prixBillet : double
+    + Vol(num : string, dest : string, date : string, heure : string, cap : int, prix : double)
+    + getPlacesDisponibles() : int
+    + getPrixBillet() : double
+    + decrementerPlaces() : void
+    + incrementerPlaces() : void
+    + afficherDetails() : void
+}
+
+class Reservation {
+    - idReservation : int
+    - statut : string
+    + Reservation(id : int, p : Passager*, v : Vol*)
+    + getId() : int
+    + getStatut() : string
+    + setStatut(s : string) : void
+    + afficherDetails() : void
+}
+
+class Paiement {
+    - idPaiement : int
+    - montant : double
+    - modePaiement : string
+    + Paiement(id : int, res : Reservation*, montant : double, mode : string)
+    + effectuerPaiement() : void
+}
+
+class Annulation {
+    - idAnnulation : int
+    - motif : string
+    - statutRemboursement : string
+    + Annulation(id : int, res : Reservation*, motif : string)
+}
+
+Passager "1" -- "0..*" Reservation : effectue >
+Vol "1" -- "0..*" Reservation : concerne >
+Reservation "1" -- "0..1" Paiement : règle >
+Reservation "1" -- "0..1" Annulation : subit >
+AgenceVoyage o-- "*" Passager
+AgenceVoyage o-- "*" Vol
+AgenceVoyage o-- "*" Reservation
+AgenceVoyage o-- "*" Paiement
+AgenceVoyage o-- "*" Annulation
+@enduml
